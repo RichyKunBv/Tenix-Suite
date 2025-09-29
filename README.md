@@ -89,4 +89,5 @@ Distribuido bajo la **GNU General Public License**. Ver `LICENSE` para más info
 ---
 
 **Creado con ❤️ por RichyKunBv**
+
 **Unificado por Gemini 🤖**
