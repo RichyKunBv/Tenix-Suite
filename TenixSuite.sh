@@ -13,7 +13,7 @@ set -o pipefail
 set -o nounset
 
 # --- Versiones ---
-VERSION_LOCAL="1.0" # Version de la suit (nota: cambiar esta version cuando se actualice el script)
+VERSION_LOCAL="1.0.1" # Version de la suit (nota: cambiar esta version cuando se actualice el script)
 MANTENIX_VERSION="3.0.6" # poner la version actual de mantenix
 APPTENIX_VERSION="1.0.4" # poner la version actual de apptenix
 
@@ -654,7 +654,7 @@ function menu_mantenix() {
 function menu_apptenix() {
     while true; do
         clear
-        echo -e "${CYAN}===== Gestor de Aplicaciones (Apptenix v$APPTENIX_VERSION) =====${C_RESET}"
+        echo -e "${CYAN}===== Gestor de Aplicaciones (Apptenix v$APPTENIX_VERSION) =====${DEFAULT}"
         echo "  1. Instalar aplicación"
         echo "  2. Desinstalar aplicación"
         echo "  3. Listar aplicaciones instaladas"
