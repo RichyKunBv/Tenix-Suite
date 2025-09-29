@@ -13,7 +13,7 @@ set -o pipefail
 set -o nounset
 
 # --- Versiones ---
-VERSION_LOCAL="1.0.0" # Version de la suit (nota: cambiar esta version cuando se actualice el script)
+VERSION_LOCAL="1.0" # Version de la suit (nota: cambiar esta version cuando se actualice el script)
 MANTENIX_VERSION="3.0.6" # poner la version actual de mantenix
 APPTENIX_VERSION="1.0.4" # poner la version actual de apptenix
 
