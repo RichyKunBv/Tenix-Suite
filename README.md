@@ -1,6 +1,6 @@
 # Tenix Suite Scripts
 
-![Versión](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Versión](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![Licencia](https://img.shields.io/badge/licencia-GPL-blue.svg)
 ![Shell](https://img.shields.io/badge/language-Shell%20Script-red.svg)
 
