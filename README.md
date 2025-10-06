@@ -13,6 +13,8 @@ Tenix Suite es la fusión de dos potentes herramientas: **Mantenix**, para el ma
 ## ✨ Características Principales
 
 Tenix Suite combina lo mejor de dos mundos en un solo script interactivo y fácil de usar.
+<img width="827" height="615" alt="imagen" src="https://github.com/user-attachments/assets/935e1605-32c0-4240-b479-71d0e15f6bb1" />
+
 
 ### 🔧 Módulo 1: Mantenix (Mantenimiento del Sistema)
 
@@ -26,6 +28,8 @@ Mantén tu sistema operativo funcionando a máximo rendimiento con el mínimo es
 -   **Soporte para AUR:** Integración con helpers como `yay` y `paru` para usuarios de Arch.
 -   **Limpieza Profunda:** Elimina paquetes huérfanos, limpia la caché y borra kernels antiguos de forma segura.
 -   **Modo DIOS:** Ejecuta una secuencia completa de actualización profunda, limpieza y optimización con una sola opción.
+<img width="827" height="615" alt="imagen" src="https://github.com/user-attachments/assets/58aab812-c138-4fe5-b166-602126bd6805" />
+
 
 ### 📦 Módulo 2: Apptenix (Gestor de Aplicaciones)
 
@@ -37,7 +41,26 @@ Instala aplicaciones que no están en los repositorios oficiales de una forma li
 -   **Análisis de Dependencias:** Revisa el binario con `ldd` para advertirte sobre posibles librerías faltantes antes de instalar.
 -   **Gestión Limpia:** Registra todas las aplicaciones instaladas, permitiéndote listarlas y desinstalarlas de forma segura, eliminando todos los archivos asociados.
 -   **Registro de Actividad:** Guarda un log detallado de todas las instalaciones y errores en `~/.config/app-installer/install.log`.
+<img width="827" height="615" alt="imagen" src="https://github.com/user-attachments/assets/f84d57c2-33e8-4174-a084-8b79967acf80" />
 
+
+### 🔍 Módulo 3: Revision completa de la PC (Una pequeña mezcla de CPU-Z, Crystal Disk Info y la salud de bateria de Apple)
+
+Haz una revision mas facil de tu sistema con unos pocos clics.
+
+-   **Especificaciones:** Con la opcion "E" puedes ver los nucleos de procesador, la ram, los graficos de tu pc y tu kernel actual
+<img width="827" height="615" alt="imagen" src="https://github.com/user-attachments/assets/0f154aa0-211b-48bf-af5b-005db8a93009" />
+
+-   **Revision de Disco Duro:** Con la opcion "D" puedes ver la lista de los discos duros instalados y ahi encuentras las especificaciones del disco y informacion de su S.M.A.R.T (Temperatura, porcentaje usado, cliclos, etc.)
+
+| Lista de Discos Duros | Especificaciones del Disco | Datos S.M.A.R.T |
+| :---: | :---: | :---: |
+|<img width="827" height="615" alt="imagen" src="https://github.com/user-attachments/assets/e2fde063-e46c-4246-acd8-2362519b071e" /> | <img width="827" height="615" alt="imagen" src="https://github.com/user-attachments/assets/84140a32-64fe-4102-a4eb-e1682668a5b8" /> | <img width="827" height="615" alt="imagen" src="https://github.com/user-attachments/assets/49556f1c-65dd-4e51-a6ec-14995b36fc00" />
+
+-   **Informacion de tu bateria:** Pulsando "B" puedes ver su estado, ciclos de carga, duracion estimada, porcentaje y su capacidad maxima (lo tipo Apple)
+<img width="827" height="615" alt="imagen" src="https://github.com/user-attachments/assets/87604b6f-dad7-45f5-bcb4-26a7ea14167b" />
+
+  
 ---
 
 ## 🚀 Instalación
