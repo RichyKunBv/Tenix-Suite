@@ -1,7 +1,7 @@
 # Tenix Suite Scripts
 
-![Versión](https://img.shields.io/badge/version-1.1.0-blue.svg)
-![Licencia](https://img.shields.io/badge/licencia-GPL-blue.svg)
+![Versión](https://img.shields.io/badge/version-1.1.0-green.svg)
+![Licencia](https://img.shields.io/badge/licencia-Apache-blue.svg)
 ![Shell](https://img.shields.io/badge/language-Shell%20Script-red.svg)
 
 **La navaja suiza definitiva para el mantenimiento y gestión de aplicaciones en tu sistema Linux.**
