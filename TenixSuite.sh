@@ -3,6 +3,7 @@
 # ##################################################################
 # Tenix Suite - Fusion de Mantenix y Apptenix
 # Creador: RichyKunBv
+# Licencia: Apache License 2.0
 # Las unifique xdd
 # ##################################################################
 
@@ -13,9 +14,9 @@ set -o pipefail
 set -o nounset
 
 # --- Versiones ---
-VERSION_LOCAL="1.0.1" # Version de la suit (nota: cambiar esta version cuando se actualice el script)
-MANTENIX_VERSION="3.0.6" # poner la version actual de mantenix
-APPTENIX_VERSION="1.0.4" # poner la version actual de apptenix
+VERSION_LOCAL="1.1.0" # Version de la suit (nota: cambiar esta version cuando se actualice el script)
+MANTENIX_VERSION="3.0.6" # poner la version de mantenix
+APPTENIX_VERSION="1.0.4" # poner la version de apptenix
 
 # --- Colores ---
 DEFAULT='\033[0m'
@@ -35,11 +36,11 @@ detectar_distribucion() {
         . /etc/os-release
         DISTRO="$ID"
         
-        if [[ "$ID" == "debian" || "$ID_LIKE" == *"debian"* ]]; then
+        if [[ "$ID" == "debian" || "${ID_LIKE:-}" == *"debian"* ]]; then
             DISTRO_FAMILIA="debian"
-        elif [[ "$ID" == "fedora" || "$ID_LIKE" == *"fedora"* || "$ID" == "rhel" || "$ID" == "centos" ]]; then
+        elif [[ "$ID" == "fedora" || "${ID_LIKE:-}" == *"fedora"* || "$ID" == "rhel" || "$ID" == "centos" ]]; then
             DISTRO_FAMILIA="fedora"
-        elif [[ "$ID" == "arch" || "$ID_LIKE" == *"arch"* || "$ID" == "manjaro" ]]; then
+        elif [[ "$ID" == "arch" || "${ID_LIKE:-}" == *"arch"* || "$ID" == "manjaro" ]]; then
             DISTRO_FAMILIA="arch"
         else
             DISTRO_FAMILIA="desconocida"
@@ -140,7 +141,7 @@ log() {
 info()    { echo -e "${ASUL}INFO:${DEFAULT} $1";   log "INFO: $1"; }
 success() { echo -e "${VERDE}ÉXITO:${DEFAULT} $1"; log "ÉXITO: $1"; }
 warn()    { echo -e "${AMA}AVISO:${DEFAULT} $1";log "AVISO: $1"; }
-error()   { echo -e "${ROJO}ERROR:${DEFAULT} $1" >&2; log "ERROR: $1"; exit 1; }
+error()   { echo -e "${ROJO}ERROR:${DEFAULT} $1" >&2; log "ERROR: $1"; return 1; }
 
 # Utilidades
 clean_path() {
@@ -502,6 +503,85 @@ listar_aplicaciones() {
 
 # --- FUNCIONES UNIFICADAS ---
 
+function mostrar_especificaciones() {
+    clear
+    echo -e "${CYAN}--- Especificaciones del Sistema ---${DEFAULT}"
+    echo -e "${VERDE}--- Distribución: $DISTRO (Familia: $DISTRO_FAMILIA) ---${DEFAULT}"
+    echo
+    echo -e "${VERDE}## Información de la CPU:${DEFAULT}"
+    lscpu | grep -E 'Model name|Architecture|CPU\(s\)|Core\(s\) per socket|Thread\(s\) per core|Vendor ID|CPU max MHz|CPU min MHz'
+    echo
+    echo -e "${VERDE}## Información de la Memoria RAM:${DEFAULT}"
+    free -h | grep --color=never -E 'Mem:|Swap:'
+    echo
+    echo -e "${VERDE}## Información de la Tarjeta Gráfica:${DEFAULT}"
+    lspci -k | grep -EA3 'VGA|3D|Display'
+    echo
+    echo -e "${VERDE}## Información del Kernel:${DEFAULT}"
+    uname -a
+    echo
+    read -p "Presiona Enter para continuar..."
+}
+
+function revisar_disco() {
+    clear
+    echo -e "${CYAN}--- Revisión de Salud de Disco ---${DEFAULT}"
+    echo
+    if ! command -v smartctl &>/dev/null; then
+        warn "La herramienta 'smartctl' no está instalada. La información será limitada."
+        echo "Para instalarla: sudo apt install smartmontools (Debian) o sudo dnf install smartmontools (Fedora)"
+        echo
+    fi
+    
+    echo -e "${VERDE}Discos disponibles:${DEFAULT}"
+    lsblk -ndo NAME,SIZE,TYPE,TRAN | grep 'disk'
+    echo
+    read -p "Ingresa el nombre del disco a revisar (ej. sda, nvme0n1): " DISCO
+
+    if [ -z "$DISCO" ]; then
+        warn "No se ingresó ningún disco. Volviendo al menú."
+        sleep 2
+        return
+    fi
+
+    if ! lsblk "/dev/$DISCO" >/dev/null 2>&1; then
+        error "El disco /dev/$DISCO no existe. Verifica el nombre."
+        sleep 2
+        return
+    fi
+
+    clear
+    echo -e "${CYAN}--- Reporte para /dev/$DISCO ---${DEFAULT}"
+    if command -v smartctl &>/dev/null; then
+        sudo smartctl -a "/dev/$DISCO"
+    else
+        sudo fdisk -l "/dev/$DISCO" 2>/dev/null | grep "Disk"
+        sudo hdparm -I "/dev/$DISCO" 2>/dev/null | grep -E 'Model Number|Serial Number|Firmware Revision'
+    fi
+    echo
+    read -p "Presiona Enter para continuar..."
+}
+
+function revisar_bateria() {
+    clear
+    echo -e "${CYAN}--- Estado de la Batería ---${DEFAULT}"
+    echo
+    local BATTERY_PATH
+    BATTERY_PATH=$(upower -e | grep battery | head -n1) 
+    
+    if [ -z "$BATTERY_PATH" ]; then
+        warn "No se encontró ninguna batería en el sistema."
+        sleep 2
+        return 1
+    fi 
+
+    echo -e "${VERDE}Información para la batería: $(basename "$BATTERY_PATH")${DEFAULT}"
+    upower -i "$BATTERY_PATH" | grep --color=never -E 'state|time to empty|percentage|charge-cycles|capacity'
+    echo
+    read -p "Presiona Enter para continuar..."
+}
+
+
 # --- easter egg xd ---
 
 function XD() {
@@ -603,7 +683,10 @@ function AD() {
     echo -e "\n${VERDE}----------------------------------${DEFAULT}"
     echo -e "\n${CYAN}---        Tenix Suite         ---${DEFAULT}"
     echo -e "\n${VERDE}----------------------------------${DEFAULT}"
+    echo -e "${VERDE}--- Distribución: $DISTRO (Familia: $DISTRO_FAMILIA) ---${DEFAULT}"
+    echo ""
     echo " Creador: RichyKunBv"
+    echo ""
     echo " Version: $VERSION_LOCAL"
     echo ""
     echo -e "${AMA}Mantenix (v$MANTENIX_VERSION):${DEFAULT} Automatiza la actualización,"
@@ -625,6 +708,7 @@ function menu_mantenix() {
     while true; do
         clear
         echo -e "\n${VERDE}--- Asistente de Mantenimiento (Mantenix v$MANTENIX_VERSION) ---${DEFAULT}"
+        echo -e "${VERDE}--- Distribución: $DISTRO (Familia: $DISTRO_FAMILIA) ---${DEFAULT}"
         echo "  1. Actualización Estándar"
         echo "  2. Limpiar Sistema"
         echo "  3. Actualización Profunda del Sistema"
@@ -687,11 +771,16 @@ detectar_distribucion
 while true; do
     clear
     echo -e "\n${CYAN} ---          Suite v$VERSION_LOCAL          ---${DEFAULT}"
+    echo -e "${VERDE}--- Distribución: $DISTRO (Familia: $DISTRO_FAMILIA) ---${DEFAULT}"
     echo -e "    Creado con <3 por ${AMA}RichyKunBv${DEFAULT}"
     echo ""
     echo "  1. MantenixL"
     echo "  2. Apptenix"
-    echo ""
+    echo
+    echo "  E. Ver Especificaciones"
+    echo "  D. Revisar Disco"
+    echo "  B. Estado de Batería"
+    echo
     echo "  A. Acerca De"
     echo "  G. Ir a mi GitHub"
     echo "  Y. Actualizar Script"
@@ -704,6 +793,9 @@ while true; do
         [ñÑ]) clear; XD; sleep 2;;
         [aA]) clear; AD; read -p "Presiona Enter para continuar...";;
         [gG]) web;;
+        [eE]) mostrar_especificaciones;;
+        [dD]) revisar_disco;;
+        [bB]) revisar_bateria;;
         [yY]) actualizar_script; sleep 2;;
         [xX]) echo -e "${CYAN}¡Adios baby!${DEFAULT}"; break;;
         *) warn "Opción no válida."; sleep 1;;
