@@ -107,7 +107,7 @@ Las contribuciones son bienvenidas. Si tienes ideas para mejorar Tenix Suite, po
 
 ## 📜 Licencia
 
-Distribuido bajo la **GNU General Public License**. Ver `LICENSE` para más información.
+Distribuido bajo la **Apache License 2.0**. Ver `LICENSE` para más información.
 
 ---
 
